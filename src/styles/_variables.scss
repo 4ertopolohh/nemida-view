@@ -1,0 +1,68 @@
+@use 'sass:map';
+@use './fonts' as *;
+
+$max-width-container: 1242px;
+
+$transition-style: all 500ms ease;
+$transition-icon-rotate-style: all 100ms ease;
+
+$font-default: 'Wix Madefor Text', sans-serif;
+$font-title: 'AKONY', sans-serif;
+
+$color-base-black: #0A0A0A;
+$color-black: #000;
+$color-white: #fff;
+$color-gray-49: #494949;
+$color-gray-cf: #cfcfce;
+
+$glass-dark-matte-strong: (
+    background: rgba($color-base-black, 0.64),
+    border-color: rgba($color-white, 0.12),
+    backdrop-filter: blur(15px),
+);
+
+$glass-light-matte-weak: (
+    background: rgba(147, 146, 146, 0.16),
+    border-color: rgba($color-white, 0.28),
+    backdrop-filter: blur(2px) saturate(140%),
+);
+
+$glass-light-matte-strong: (
+    background: rgba(147, 146, 146, 0.16),
+    border-color: rgba($color-white, 0.28),
+    backdrop-filter: blur(12px) saturate(140%),
+);
+
+@mixin apply-glass-surface($glass-style) {
+    background: map.get($glass-style, background);
+    border-color: map.get($glass-style, border-color);
+    -webkit-backdrop-filter: map.get($glass-style, backdrop-filter);
+    backdrop-filter: map.get($glass-style, backdrop-filter);
+}
+
+@mixin flex($justify, $align, $direction) {
+    display: flex;
+    align-items: $align;
+    justify-content: $justify;
+    flex-direction: $direction;
+}
+
+@mixin flex-center-row {
+    @include flex(center, center, row);
+}
+
+@mixin flex-center-column {
+    @include flex(center, center, column);
+}
+
+@mixin flex-between-row {
+    @include flex(space-between, center, row);
+}
+
+@mixin flex-between-column {
+    @include flex(space-between, center, column);
+}
+
+@mixin flex-in-dev {
+    @include flex(center, center, row);
+}

@@ -1,0 +1,14 @@
+@use '../../../../styles/variables' as *;
+
+.ourServicesSection {
+    padding-top: 250px;
+
+    .container {
+        gap: 50px;
+        flex-direction: column;
+
+        .ourServicesContent {
+            @include flex-between-row;
+        }
+    }
+}

@@ -1,0 +1,35 @@
+@use '../../styles/variables' as *;
+
+.headerLogo {
+    width: 58px;
+    height: 58px;
+    @include flex-center-column;
+    margin-top: 10px;
+    border-radius: 50%;
+    position: relative;
+    overflow: visible;
+    transition: $transition-style;
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        border: 1px solid rgba($color-white, 0.18);
+        box-shadow: 0 0 8px rgba($color-white, 0), 0 0 18px rgba($color-white, 0), 0 0 30px rgba($color-white, 0);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 260ms ease, border-color 260ms ease, box-shadow 260ms ease;
+    }
+
+    &:hover::after {
+        opacity: 1;
+        border-color: rgba($color-white, 0.42);
+        box-shadow: 0 0 10px rgba($color-white, 0.36), 0 0 24px rgba($color-white, 0.22), 0 0 40px rgba($color-white, 0.14);
+    }
+
+    img {
+        width: 58px;
+        height: 58px;
+    }
+}

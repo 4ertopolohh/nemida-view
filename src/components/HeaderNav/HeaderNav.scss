@@ -1,0 +1,31 @@
+@use '../../styles/variables' as *;
+
+.headerNav {
+    width: fit-content;
+    @include flex-center-column;
+    height: 50px;
+    overflow: visible;
+
+    .headerNavList {
+        @include flex-between-row;
+        align-items: center;
+        justify-content: space-evenly !important;
+        width: 100%;
+        height: 50px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        gap: 115px;
+        overflow: visible;
+    }
+
+    .headerNavListItem {
+        @include flex-center-row;
+        align-self: center;
+        align-items: flex-start;
+        height: 40px;
+        padding-top: 20px;
+        width: fit-content;
+        overflow: visible;
+    }
+}

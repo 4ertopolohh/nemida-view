@@ -1,0 +1,45 @@
+@use '../../../../styles/variables' as *;
+@use 'sass:list';
+
+.welcomeSectionTitle {
+    font-size: 75px;
+    max-width: 690px;
+    opacity: 0;
+    animation-name: welcome-section-title-fade-in;
+    animation-duration: list.nth($transition-style, 2);
+    animation-timing-function: list.nth($transition-style, 3);
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+
+    &::after {
+        content: '_';
+        display: inline-block;
+        // margin-left: 0.08em;
+        position: relative;
+        top: -13px;
+        animation: terminal-cursor-blink 1s steps(1, end) infinite;
+    }
+}
+
+@keyframes welcome-section-title-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes terminal-cursor-blink {
+
+    0%,
+    49% {
+        opacity: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 0;
+    }
+}

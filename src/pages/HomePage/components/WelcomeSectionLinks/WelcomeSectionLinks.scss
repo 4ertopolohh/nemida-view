@@ -1,0 +1,35 @@
+@use '../../../../styles/variables' as *;
+
+.welcomeSectionLinks {
+    width: 100%;
+    @include flex-between-row;
+    justify-content: start;
+    gap: 20px;
+
+    .welcomeSectionLinksList {
+        @include flex-center-row;
+        gap: 10px;
+        padding-right: 12px;
+
+        .welcomeSectionLinksListItem {
+            width: 48px;
+            height: 48px;
+
+            a {
+                width: 48px;
+                height: 48px;
+                @include flex-center-column;
+                transition: $transition-style;
+
+                img {
+                    height: 48px;
+                    width: auto;
+                }
+
+                &:hover {
+                    transform: scale(0.95);
+                }
+            }
+        }
+    }
+}

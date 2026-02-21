@@ -1,0 +1,67 @@
+@use '../../../../styles/variables' as *;
+
+.serviceCard {
+    width: 334px;
+    height: 348px;
+    border-radius: 25px;
+    position: relative;
+    overflow: visible;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    @include flex-between-column;
+    padding: 45px 30px;
+    transition: $transition-style;
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        border: 1px solid rgba($color-white, 0.24);
+        box-shadow: 0 0 8px rgba($color-white, 0.2), 0 0 18px rgba($color-white, 0.12), 0 0 30px rgba($color-white, 0.08);
+        pointer-events: none;
+    }
+
+    &:hover {
+        transform: scale(0.99);
+    }
+
+    .serviceCardDescription {
+        width: 100%;
+        @include flex-center-column;
+        align-items: start;
+        gap: 22px;
+
+        .serviceCardHeader {
+            @include flex-center-row;
+            justify-content: start;
+            gap: 22px;
+
+            .serviceCardTitle {
+                font-size: 32px;
+                font-weight: 800;
+                font-family: $font-default;
+            }
+
+            .serviceCardIcon {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        .serviceCardSubtitle {
+            max-width: 250px;
+            font-size: 18px;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+    }
+
+    .serviceCardPrice {
+        font-size: 40px;
+        font-weight: 800;
+        width: 100%;
+        font-family: $font-default;
+    }
+}

@@ -1,0 +1,16 @@
+@use '../../styles/variables' as *;
+
+.sectionTitle {
+    @include flex-center-column;
+    width: 100%;
+
+    h1 {
+        font-size: 82px;
+        line-height: 65px;
+    }
+
+    #sectionTitleBlack {
+        color: $color-base-black;
+        -webkit-text-stroke: 2px $color-white;
+    }
+}

@@ -1,0 +1,22 @@
+@use '../../styles/variables' as *;
+
+.notFoundSection {
+    padding-top: 0;
+
+    .container {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        height: 100vh;
+
+        .notFoundTitle {
+            font-size: 90px;
+        }
+
+        .notFoundSubtitle {
+            font-size: 25px;
+            font-weight: 400;
+        }
+    }
+}
