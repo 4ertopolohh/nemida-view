@@ -18,12 +18,12 @@
     @include apply-glass-surface($glass-light-matte-strong);
     box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
 
-    transition: $transition-style;
+    transition: $transition-interactive;
     outline: none;
 
     span {
         text-align: center;
-        transition: color 300ms ease;
+        transition: $transition-color-medium;
     }
 
     #changeLanguageSeparator {

@@ -1,0 +1,43 @@
+@use '../../../../styles/variables' as *;
+
+.serviceCardMini{
+    border-radius: 25px;
+    width: 328px;
+    height: 80px;
+    position: relative;
+    overflow: visible;
+    @include apply-glass-surface($glass-dark-matte-strong);
+    transition: $transition-interactive;
+    padding: 15px 30px;
+    @include flex-between-column;
+    align-items: start;
+    z-index: 9;
+    border: 1px solid rgba($color-white, 0.24);
+
+    .serviceCardMiniDescription{
+        @include flex-center-column;
+        align-items: start;
+        gap: 5px;
+
+        .serviceCardMiniTitle{
+            font-size: 22px;
+        }
+
+        .serviceCardMiniSubtitle{
+            font-size: 14px;
+            color: $color-gray-cf;
+        }
+    }
+
+    &:hover{
+        transform: scale(0.99);
+    }
+
+    h6{
+        font-family: $font-default;
+    }
+
+    .serviceCardMiniPrice{
+        font-size: 16px;
+    }
+}

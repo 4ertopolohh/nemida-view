@@ -1,0 +1,90 @@
+@use '../../../../styles/variables' as *;
+
+.serviceBanner{
+    width: 390px;
+    position: relative;
+    isolation: isolate;
+    @include flex-center-column;
+    justify-content: start;
+    gap: 0;
+    transition: $transition-gap-default;
+
+    /* Коннекторы отключены
+    .serviceBannerConnectors {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        opacity: 0;
+        pointer-events: none;
+        transition: $transition-opacity-soft;
+        display: none;
+    }
+
+    .serviceBannerConnectorsVisible {
+        opacity: 1;
+    }
+
+    .serviceBannerConnectorSvg {
+        width: 100%;
+        height: 100%;
+        display: block;
+        overflow: visible;
+    }
+
+    .serviceBannerConnectorLine {
+        stroke: rgba($color-white, 0.95);
+        stroke-width: 1;
+        stroke-linecap: round;
+    }
+    */
+
+    .serviceCardConnectorAnchor {
+        position: relative;
+        z-index: 2;
+    }
+
+    .serviceCardMiniMotion {
+        width: 100%;
+        overflow: hidden;
+        transform-origin: top center;
+        will-change: auto;
+        position: relative;
+        z-index: 2;
+        min-height: 112px;
+        display: none;
+    }
+
+    .serviceCardMiniMotion--animating {
+        will-change: height, transform, opacity;
+    }
+
+    .serviceCardMini {
+        height: 80px;
+        opacity: 1;
+        pointer-events: auto;
+        overflow: visible;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    &:hover {
+        gap: 15px;
+
+        .serviceCard {
+            height: 180px;
+        }
+
+        .serviceCardMini {
+            height: 80px;
+            opacity: 1;
+            pointer-events: auto;
+            overflow: visible;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+
+        .serviceCardMiniMotion{
+            display: block;
+        }
+    }
+}

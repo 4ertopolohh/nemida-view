@@ -6,9 +6,47 @@
     .container {
         gap: 50px;
         flex-direction: column;
+        min-height: 950px;
 
         .ourServicesContent {
             @include flex-between-row;
+            align-items: start;
+
+            .serviceBanner {
+                opacity: 0;
+                transform: translateY(24px);
+                transition: $transition-reveal-slide;
+                will-change: opacity, transform;
+            }
+        }
+
+        .ourServicesContent--visible {
+            .serviceBanner {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .serviceBanner:nth-child(2) {
+                transition-delay: 120ms;
+            }
+
+            .serviceBanner:nth-child(3) {
+                transition-delay: 240ms;
+            }
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ourServicesSection {
+        .container {
+            .ourServicesContent {
+                .serviceBanner {
+                    opacity: 1;
+                    transform: none;
+                    transition: $transition-none;
+                }
+            }
         }
     }
 }

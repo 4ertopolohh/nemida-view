@@ -8,7 +8,7 @@
     border-radius: 50%;
     position: relative;
     overflow: visible;
-    transition: $transition-style;
+    transition: $transition-interactive;
 
     &::after {
         content: '';
@@ -19,7 +19,7 @@
         box-shadow: 0 0 8px rgba($color-white, 0), 0 0 18px rgba($color-white, 0), 0 0 30px rgba($color-white, 0);
         opacity: 0;
         pointer-events: none;
-        transition: opacity 260ms ease, border-color 260ms ease, box-shadow 260ms ease;
+        transition: $transition-overlay-glow;
     }
 
     &:hover::after {

@@ -20,7 +20,7 @@
     align-items: start;
     gap: 5px;
     padding: 8px 8px;
-    transition: $transition-style;
+    transition: $transition-interactive;
     transform-origin: center center;
 
     &::after {
@@ -30,7 +30,7 @@
         background: rgba(255, 255, 255, 0.06);
         opacity: 0;
         pointer-events: none;
-        transition: opacity 260ms ease;
+        transition: $transition-overlay-fade;
     }
 
     &:hover {

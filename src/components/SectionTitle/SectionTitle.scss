@@ -3,6 +3,10 @@
 .sectionTitle {
     @include flex-center-column;
     width: 100%;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: $transition-reveal-slide;
+    will-change: opacity, transform;
 
     h1 {
         font-size: 82px;
@@ -12,5 +16,18 @@
     #sectionTitleBlack {
         color: $color-base-black;
         -webkit-text-stroke: 2px $color-white;
+    }
+}
+
+.sectionTitle--visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sectionTitle {
+        opacity: 1;
+        transform: none;
+        transition: $transition-none;
     }
 }

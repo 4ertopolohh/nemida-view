@@ -5,13 +5,42 @@
     height: 348px;
     border-radius: 25px;
     position: relative;
-    overflow: visible;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    overflow: hidden;
+    @include apply-glass-surface($glass-dark-matte-strong);
     @include flex-between-column;
-    padding: 45px 30px;
+    padding: 30px 30px;
     transition: $transition-style;
+    z-index: 10;
+    contain: layout paint;
+    isolation: isolate;
+
+    &::before {
+        display: none;
+    }
+
+    &.withBlob::before {
+        display: block;
+        content: '';
+        position: absolute;
+        left: 55%;
+        top: 55%;
+        width: 260px;
+        height: 180px;
+        border-radius: 58% 42% 45% 55% / 55% 50% 50% 45%;
+        background: radial-gradient(
+            circle at 30% 30%,
+            rgba(var(--blob-rgb, 80, 255, 160), 0.28) 0%,
+            rgba(var(--blob-rgb, 80, 255, 160), 0.16) 35%,
+            rgba(var(--blob-rgb, 80, 255, 160), 0.08) 55%,
+            rgba(var(--blob-rgb, 80, 255, 160), 0) 72%
+        );
+        filter: blur(28px);
+        opacity: 0.85;
+        transform: translate(-50%, -50%);
+        animation: blobFloat var(--blob-dur, 10s) ease-in-out infinite;
+        pointer-events: none;
+        z-index: 0;
+    }
 
     &::after {
         content: '';
@@ -21,22 +50,31 @@
         border: 1px solid rgba($color-white, 0.24);
         box-shadow: 0 0 8px rgba($color-white, 0.2), 0 0 18px rgba($color-white, 0.12), 0 0 30px rgba($color-white, 0.08);
         pointer-events: none;
+        z-index: 2;
     }
 
     &:hover {
+        will-change: transform;
+        transform: scale(0.99);
+    }
+
+    &:focus-visible {
+        will-change: transform;
         transform: scale(0.99);
     }
 
     .serviceCardDescription {
+        position: relative;
+        z-index: 1;
         width: 100%;
         @include flex-center-column;
         align-items: start;
-        gap: 22px;
+        gap: 10px;
 
         .serviceCardHeader {
-            @include flex-center-row;
-            justify-content: start;
+            @include flex-between-row;
             gap: 22px;
+            width: 100%;
 
             .serviceCardTitle {
                 font-size: 32px;
@@ -51,7 +89,7 @@
         }
 
         .serviceCardSubtitle {
-            max-width: 250px;
+            max-width: 275px;
             font-size: 18px;
             font-weight: 500;
             opacity: 0.8;
@@ -59,9 +97,38 @@
     }
 
     .serviceCardPrice {
+        position: relative;
+        z-index: 1;
         font-size: 40px;
         font-weight: 800;
         width: 100%;
         font-family: $font-default;
+    }
+}
+
+@keyframes blobFloat {
+    0% {
+        transform: translate(-50%, -50%) translate(0px, 0px) scale(1);
+        border-radius: 58% 42% 45% 55% / 55% 50% 50% 45%;
+    }
+
+    25% {
+        transform: translate(-50%, -50%) translate(var(--bx1, -16px), var(--by1, 10px)) scale(1.07);
+        border-radius: 48% 52% 58% 42% / 52% 45% 55% 48%;
+    }
+
+    50% {
+        transform: translate(-50%, -50%) translate(var(--bx2, 10px), var(--by2, -14px)) scale(0.98);
+        border-radius: 62% 38% 40% 60% / 45% 58% 42% 55%;
+    }
+
+    75% {
+        transform: translate(-50%, -50%) translate(var(--bx3, 18px), var(--by3, 12px)) scale(1.06);
+        border-radius: 44% 56% 50% 50% / 60% 42% 58% 40%;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) translate(0px, 0px) scale(1);
+        border-radius: 58% 42% 45% 55% / 55% 50% 50% 45%;
     }
 }

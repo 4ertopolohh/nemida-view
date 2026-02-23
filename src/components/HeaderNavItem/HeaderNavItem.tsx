@@ -75,7 +75,7 @@ const HeaderNavItem = (props: HeaderNavItemProps) => {
           }
         }}
         style={{
-          WebkitBackdropFilter: isOpen ? 'blur(2px) saturate(140%)' : 'blur(0) saturate(100%)',
+          WebkitBackdropFilter: isOpen ? 'blur(2px) saturate(140%)' : 'none',
         }}
         initial={false}
         animate={{
@@ -87,7 +87,7 @@ const HeaderNavItem = (props: HeaderNavItemProps) => {
           backgroundColor: isOpen ? 'rgba(147, 146, 146, 0.16)' : 'rgba(147, 146, 146, 0)',
           borderColor: isOpen ? 'rgba(255, 255, 255, 0.28)' : 'rgba(255, 255, 255, 0)',
           boxShadow: isOpen ? '0 10px 28px rgba(0, 0, 0, 0.18)' : '0 10px 28px rgba(0, 0, 0, 0)',
-          backdropFilter: isOpen ? 'blur(2px) saturate(140%)' : 'blur(0) saturate(100%)',
+          backdropFilter: isOpen ? 'blur(2px) saturate(140%)' : 'none',
         }}
         transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
       >

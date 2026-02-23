@@ -19,7 +19,7 @@
         border-bottom: 1px solid;
         @include apply-glass-surface($glass-dark-matte-strong);
         opacity: 0;
-        transition: opacity 170ms ease;
+        transition: $transition-underlay-opacity;
         will-change: opacity;
     }
 

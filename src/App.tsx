@@ -28,40 +28,8 @@ function App() {
   const [articlesBackground, setArticlesBackground] = useState<string>()
 
   const requestMenuAssets = useCallback(() => {
-    setMenuAssetsRequested(true)
+    setMenuAssetsRequested((requested) => (requested ? requested : true))
   }, [])
-
-  useEffect(() => {
-    if (menuAssetsRequested) return
-
-    const idleWindow = window as Window & {
-      requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number
-      cancelIdleCallback?: (id: number) => void
-    }
-
-    if (typeof idleWindow.requestIdleCallback === 'function') {
-      const idleId = idleWindow.requestIdleCallback(
-        () => {
-          setMenuAssetsRequested(true)
-        },
-        { timeout: 2400 },
-      )
-
-      return () => {
-        if (typeof idleWindow.cancelIdleCallback === 'function') {
-          idleWindow.cancelIdleCallback(idleId)
-        }
-      }
-    }
-
-    const timeoutId = window.setTimeout(() => {
-      setMenuAssetsRequested(true)
-    }, 1400)
-
-    return () => {
-      window.clearTimeout(timeoutId)
-    }
-  }, [menuAssetsRequested])
 
   useEffect(() => {
     if (!menuAssetsRequested || faqBackground) return

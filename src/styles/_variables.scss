@@ -1,10 +1,21 @@
 @use 'sass:map';
-@use './fonts' as *;
 
 $max-width-container: 1242px;
 
+$transition-none: none;
 $transition-style: all 500ms ease;
 $transition-icon-rotate-style: all 100ms ease;
+$transition-interactive: color 500ms ease, background-color 500ms ease, border-color 500ms ease,
+    box-shadow 500ms ease, transform 500ms ease, opacity 500ms ease, padding 500ms ease,
+    backdrop-filter 500ms ease, -webkit-backdrop-filter 500ms ease;
+$transition-icon-rotate: transform 100ms ease, opacity 100ms ease;
+$transition-reveal-slide: opacity 520ms ease, transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+$transition-underlay-opacity: opacity 170ms ease;
+$transition-color-medium: color 300ms ease;
+$transition-overlay-glow: opacity 260ms ease, border-color 260ms ease, box-shadow 260ms ease;
+$transition-overlay-fade: opacity 260ms ease;
+$transition-gap-default: gap 500ms ease;
+$transition-opacity-soft: opacity 280ms ease;
 
 $font-default: 'Wix Madefor Text', sans-serif;
 $font-title: 'AKONY', sans-serif;
