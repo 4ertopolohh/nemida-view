@@ -1,1 +1,0 @@
-import{$ as e}from"./index-coZ8vJXQ.js";import{I as r}from"./InDevSection-DY-fnr9y.js";import"./OnHomeButton-ZKWkZ_R9.js";const o=()=>e.jsx("main",{id:"servicesPage",children:e.jsx(r,{title:"Услуги"})});export{o as default};

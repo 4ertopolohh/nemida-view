@@ -1,0 +1,1 @@
+import{j as e}from"./index-CFO69p1R.js";import{O as n}from"./OnHomeButton-C6khbYG0.js";const c=({title:s})=>e.jsx("section",{className:"inDevSection",children:e.jsxs("div",{className:"container",children:[e.jsx("h1",{className:"inDevSectionTitle",children:s}),e.jsx("p",{className:"inDevSectionSubtitle",children:"Страница в разработке..."}),e.jsx(n,{})]})});export{c as I};
