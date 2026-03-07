@@ -1,0 +1,1 @@
+import{j as o,L as n}from"./index-DvYyqGUc.js";const t="_onHomeButton_1ncw6_1",s={onHomeButton:t},m=()=>o.jsx(n,{to:"/",className:s.onHomeButton,children:o.jsx("span",{children:"На главную"})});export{m as O};

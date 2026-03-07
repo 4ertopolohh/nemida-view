@@ -1,0 +1,1 @@
+import{j as t}from"./index-DvYyqGUc.js";import{I as e}from"./InDevSection-D5qss5JU.js";import"./OnHomeButton-CrwIkkRg.js";const s=()=>t.jsx("main",{id:"FAQPage",children:t.jsx(e,{title:"FAQ"})});export{s as default};
