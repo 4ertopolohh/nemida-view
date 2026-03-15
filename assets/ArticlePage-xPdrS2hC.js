@@ -1,0 +1,1 @@
+import{j as t}from"./index-CMoUq7Jm.js";import{I as e}from"./InDevSection-D2wJtKg8.js";import"./OnHomeButton-ojb4zQhB.js";const a=()=>t.jsx("main",{id:"articlePage",children:t.jsx(e,{title:"Статьи"})});export{a as default};

@@ -1,0 +1,1 @@
+import{j as o}from"./index-CMoUq7Jm.js";import{I as t}from"./InDevSection-D2wJtKg8.js";import"./OnHomeButton-ojb4zQhB.js";const s=()=>o.jsx("main",{id:"portfolioPage",children:o.jsx(t,{title:"Портфолио"})});export{s as default};
