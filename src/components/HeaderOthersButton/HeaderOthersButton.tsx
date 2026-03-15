@@ -1,5 +1,5 @@
 ﻿import { Link } from 'react-router-dom'
-import '../HeaderOthersButton/HeaderOthersButton.scss'
+import styles from '../HeaderOthersButton/HeaderOthersButton.module.scss'
 
 export type HeaderOthersButtonProps = {
   link: string
@@ -13,12 +13,12 @@ const HeaderOthersButton = ({ link, title, icon, items, backgroundImage }: Heade
   const buttonStyle = backgroundImage ? { backgroundImage: `url(${backgroundImage})` } : undefined
 
   return (
-    <Link to={link} className='headerOthersButton' style={buttonStyle}>
-      <div className='headerOthersButtonHeader'>
-        <h6 className='headerOthersButtonTitle'>{title}</h6>
-        {icon && <img src={icon} alt='icon' loading='lazy' className='headerOthersButtonIcon' />}
+    <Link to={link} className={styles.headerOthersButton} style={buttonStyle}>
+      <div className={styles.headerOthersButtonHeader}>
+        <h6 className={styles.headerOthersButtonTitle}>{title}</h6>
+        {icon && <img src={icon} alt='icon' loading='lazy' className={styles.headerOthersButtonIcon} />}
       </div>
-      <ul className='headerOthersButtonList'>
+      <ul className={styles.headerOthersButtonList}>
         {items.map((item, index) => (
           <li key={`${item}-${index}`}>{item}</li>
         ))}

@@ -1,5 +1,5 @@
 import ReactLogo3D from '../../../../components/ReactLogo3D/ReactLogo3D';
-import '../WelcomeSection/WelcomeSection.scss'
+import styles from '../WelcomeSection/WelcomeSection.module.scss'
 import WelcomeSectionLinks, { type WelcomeSectionLinkItem } from '../WelcomeSectionLinks/WelcomeSectionLinks';
 import WelcomeSectionSubtitle from '../WelcomeSectionSubtitle/WelcomeSectionSubtitle';
 import WelcomeSectionTitle from '../WelcomeSectionTitle/WelcomeSectionTitle';
@@ -22,18 +22,18 @@ const WelcomeSection = () => {
     ]
 
     return (
-        <section className='welcomeSection'>
-            <div className='container'>
-                <div className='welcomeSectionWrapper'>
-                    <div className='welcomeSectionDescription'>
+        <section className={styles.welcomeSection}>
+            <div className={`container ${styles.container}`}>
+                <div className={styles.welcomeSectionWrapper}>
+                    <div className={styles.welcomeSectionDescription}>
                         <WelcomeSectionTitle />
-                        <div className='welcomeSectionDescriptionSubtitles'>
+                        <div className={styles.welcomeSectionDescriptionSubtitles}>
                             <WelcomeSectionSubtitle subtitle='Современные сайты под ключ с продуманным кодом и авторским дизайном. ' />
                             <WelcomeSectionSubtitle subtitle='Никаких шаблонов - только ваши требования. ' />
                         </div>
                         <WelcomeSectionLinks links={links} />
                     </div>
-                    <ReactLogo3D />
+                    <ReactLogo3D renderOnView optimisation='on' />
                 </div>
             </div>
         </section>

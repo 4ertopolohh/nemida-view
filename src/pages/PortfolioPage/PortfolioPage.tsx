@@ -1,5 +1,5 @@
 import InDevSection from '../../components/InDevSection/InDevSection';
-import '../PortfolioPage/PortfolioPage.scss'
+import '../PortfolioPage/PortfolioPage.module.scss'
 
 const PortfolioPage = () => {
     return (

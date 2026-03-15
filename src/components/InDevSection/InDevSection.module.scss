@@ -1,0 +1,22 @@
+@use '../../styles/variables' as *;
+
+.inDevSection {
+    padding-top: 0;
+
+    .container {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        height: 100vh;
+
+        .inDevSectionTitle {
+            font-size: 90px;
+        }
+
+        .inDevSectionSubtitle {
+            font-size: 25px;
+            font-weight: 400;
+        }
+    }
+}

@@ -1,0 +1,22 @@
+@use '../../styles/variables' as *;
+
+.sectionTitle{
+    font-size: 48px;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: $transition-reveal-slide;
+    will-change: opacity, transform;
+}
+
+.sectionTitleVisible{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sectionTitle{
+        opacity: 1;
+        transform: none;
+        transition: $transition-none;
+    }
+}

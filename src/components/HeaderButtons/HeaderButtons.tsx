@@ -1,10 +1,10 @@
 import ChangeLanguageButton from '../ChangeLanguageButton/ChangeLanguageButton';
 import ContactsButton from '../ContactsButton/ContactsButton';
-import '../HeaderButtons/HeaderButtons.scss'
+import styles from '../HeaderButtons/HeaderButtons.module.scss'
 
 const HeaderButtons = () => {
     return (
-        <div className='headerButtons'>
+        <div className={styles.headerButtons}>
             <ContactsButton />
             <ChangeLanguageButton />
         </div>

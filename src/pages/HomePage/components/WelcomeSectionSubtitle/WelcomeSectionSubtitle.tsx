@@ -1,4 +1,4 @@
-import '../WelcomeSectionSubtitle/WelcomeSectionSubtitle.scss'
+import styles from '../WelcomeSectionSubtitle/WelcomeSectionSubtitle.module.scss'
 
 export type WelcomeSectionSubtitleProps = {
     subtitle: string
@@ -6,7 +6,7 @@ export type WelcomeSectionSubtitleProps = {
 
 const WelcomeSectionSubtitle = ({ subtitle }: WelcomeSectionSubtitleProps) => {
     return (
-        <p className='WelcomeSectionSubtitle'>{subtitle}</p>
+        <p className={styles.WelcomeSectionSubtitle}>{subtitle}</p>
     )
 }
 

@@ -1,0 +1,138 @@
+@use '../../styles/variables' as *;
+
+.serviceCard{
+    @include flex-between-column;
+    justify-content: end;
+    position: relative;
+    border-radius: 20px;
+    padding: 15px 15px;
+    overflow: hidden;
+    contain: layout paint;
+    isolation: isolate;
+
+    .serviceCardArrow{
+        position: absolute;
+        top: 7px;
+        right: 7px;
+        width: 35px;
+        height: 35px;
+        z-index: 2;
+    }
+
+    .preview{
+        @include flex-center-column;
+        flex: 1 1 auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    .description{
+        @include flex-center-column;
+        justify-content: end;
+        gap: 9px;
+        position: relative;
+        z-index: 1;
+
+        .serviceCardTitle{
+            font-size: 36px;
+            font-family: $font-default-title;
+            width: 100%;
+            line-height: 95%;
+        }
+
+        .serviceCardSubtitle{
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .serviceCardPrice{
+            font-size: 32px;
+            font-family: $font-default-title;
+            width: 100%;
+            padding-bottom: 26px;
+        }
+    }
+}
+
+.serviceCardGlass{
+    border: 1px solid;
+    @include apply-glass-surface($glass-dark-matte-strong);
+
+    &::before{
+        content: '';
+        position: absolute;
+        left: 55%;
+        top: 55%;
+        width: 260px;
+        height: 180px;
+        border-radius: 58% 42% 45% 55% / 55% 50% 50% 45%;
+        background: radial-gradient(
+            circle at 30% 30%,
+            rgba(var(--blob-rgb, 80, 255, 160), 0.36) 0%,
+            rgba(var(--blob-rgb, 80, 255, 160), 0.22) 35%,
+            rgba(var(--blob-rgb, 80, 255, 160), 0.12) 55%,
+            rgba(var(--blob-rgb, 80, 255, 160), 0) 72%
+        );
+        filter: blur(28px);
+        opacity: 0.93;
+        transform: translate(-50%, -50%);
+        animation: blobFloat var(--blob-dur, 10s) ease-in-out infinite;
+        pointer-events: none;
+        z-index: 0;
+    }
+}
+
+@keyframes blobFloat{
+    0%{
+        transform: translate(-50%, -50%) translate(0px, 0px) scale(1);
+        border-radius: 58% 42% 45% 55% / 55% 50% 50% 45%;
+    }
+
+    12.5%{
+        transform: translate(-50%, -50%) translate(var(--bx1, -16px), var(--by1, 10px)) scale(1.07);
+        border-radius: 48% 52% 58% 42% / 52% 45% 55% 48%;
+    }
+
+    25%{
+        transform: translate(-50%, -50%) translate(var(--bx2, 10px), var(--by2, -14px)) scale(0.98);
+        border-radius: 62% 38% 40% 60% / 45% 58% 42% 55%;
+    }
+
+    37.5%{
+        transform: translate(-50%, -50%) translate(var(--bx3, 18px), var(--by3, 12px)) scale(1.06);
+        border-radius: 44% 56% 50% 50% / 60% 42% 58% 40%;
+    }
+
+    50%{
+        transform: translate(-50%, -50%) translate(var(--bx4, -14px), var(--by4, -6px)) scale(0.97);
+        border-radius: 57% 43% 41% 59% / 49% 61% 39% 51%;
+    }
+
+    62.5%{
+        transform: translate(-50%, -50%) translate(var(--bx5, 6px), var(--by5, 16px)) scale(1.08);
+        border-radius: 40% 60% 53% 47% / 56% 44% 56% 44%;
+    }
+
+    75%{
+        transform: translate(-50%, -50%) translate(var(--bx6, -20px), var(--by6, 8px)) scale(1.01);
+        border-radius: 63% 37% 47% 53% / 42% 57% 43% 58%;
+    }
+
+    87.5%{
+        transform: translate(-50%, -50%) translate(var(--bx7, 12px), var(--by7, -18px)) scale(1.05);
+        border-radius: 46% 54% 60% 40% / 58% 41% 59% 42%;
+    }
+
+    100%{
+        transform: translate(-50%, -50%) translate(0px, 0px) scale(1);
+        border-radius: 58% 42% 45% 55% / 55% 50% 50% 45%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .serviceCardGlass{
+        &::before{
+            animation: none;
+        }
+    }
+}

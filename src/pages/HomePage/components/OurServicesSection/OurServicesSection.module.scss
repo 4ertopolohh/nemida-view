@@ -1,0 +1,40 @@
+@use '../../../../styles/variables' as *;
+
+.ourServicesSection{
+    .container{
+        @include flex-center-column;
+        align-items: start;
+        gap: 50px;
+
+        .ourServicesContent{
+            width: 100%;
+            @include flex-between-row;
+
+            .serviceCardReveal{
+                opacity: 0;
+                transform: translateY(24px);
+                transition: $transition-reveal-slide;
+                will-change: opacity, transform;
+            }
+
+            .serviceCardRevealVisible{
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ourServicesSection{
+        .container{
+            .ourServicesContent{
+                .serviceCardReveal{
+                    opacity: 1;
+                    transform: none;
+                    transition: $transition-none;
+                }
+            }
+        }
+    }
+}

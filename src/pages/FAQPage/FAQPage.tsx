@@ -1,5 +1,5 @@
 import InDevSection from '../../components/InDevSection/InDevSection';
-import '../FAQPage/FAQPage.scss'
+import '../FAQPage/FAQPage.module.scss'
 
 const FAQPage = () => {
     return (

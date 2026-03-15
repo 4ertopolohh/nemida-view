@@ -1,5 +1,5 @@
 import ContactsButton from '../../../../components/ContactsButton/ContactsButton'
-import '../WelcomeSectionLinks/WelcomeSectionLinks.scss'
+import styles from '../WelcomeSectionLinks/WelcomeSectionLinks.module.scss'
 
 export type WelcomeSectionLinkItem = {
     link: string
@@ -13,11 +13,11 @@ export type WelcomeSectionLinksProps = {
 
 const WelcomeSectionLinks = ({ links }: WelcomeSectionLinksProps) => {
     return (
-        <div className='welcomeSectionLinks'>
-            <ContactsButton width={178} fontSize={24} />
-            <ul className='welcomeSectionLinksList'>
+        <div className={styles.welcomeSectionLinks}>
+            <ContactsButton text='ОБСУДИТЬ ПРОЕКТ' width={229} height={48}/>
+            <ul className={styles.welcomeSectionLinksList}>
                 {links.map(({ link, icon, alt }, index) => (
-                    <li key={`${link}-${index}`} className='welcomeSectionLinksListItem'>
+                    <li key={`${link}-${index}`} className={styles.welcomeSectionLinksListItem}>
                         <a href={link}>
                             <img src={icon} alt={alt ?? ''} loading='lazy' />
                         </a>

@@ -2,7 +2,7 @@
 import { m } from 'framer-motion'
 import { Link, useLocation } from 'react-router-dom'
 import headerBottomArrowIcon from '../../assets/images/icons/headerBottomArrow.png'
-import '../HeaderNavItem/HeaderNavItem.scss'
+import styles from '../HeaderNavItem/HeaderNavItem.module.scss'
 
 export type HeaderNavItemType = 'default' | 'menu'
 
@@ -61,7 +61,7 @@ const HeaderNavItem = (props: HeaderNavItemProps) => {
 
     return (
       <m.div
-        className={`headerNavItem headerNavItem--menu${isRouteActive ? ' headerNavItem--active' : ''}`}
+        className={`${styles.headerNavItem} ${styles['headerNavItem--menu']}${isRouteActive ? ` ${styles['headerNavItem--active']}` : ''}`}
         aria-expanded={isOpen}
         tabIndex={0}
         onPointerDown={openMenu}
@@ -91,21 +91,21 @@ const HeaderNavItem = (props: HeaderNavItemProps) => {
         }}
         transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className='headerNavItemTitleWrapper'>
-          <h3 className='headerNavItemTitle'>{props.title}</h3>
+        <div className={styles.headerNavItemTitleWrapper}>
+          <h3 className={styles.headerNavItemTitle}>{props.title}</h3>
           <m.img
             src={headerBottomArrowIcon}
             alt=''
             aria-hidden='true'
             loading='lazy'
-            className='headerNavItemIcon'
+            className={styles.headerNavItemIcon}
             animate={{ rotate: isOpen ? 180 : 0, opacity: isOpen ? 1 : 0.75 }}
             transition={{ duration: 0.26, ease: 'easeOut' }}
           />
         </div>
         {props.menuContent && (
           <m.div
-            className='headerNavItemMenuContent'
+            className={styles.headerNavItemMenuContent}
             initial={false}
             animate={{
               maxHeight: isOpen ? 1000 : 0,
@@ -126,7 +126,7 @@ const HeaderNavItem = (props: HeaderNavItemProps) => {
             {menuChildren.map((child, index) => (
               <m.div
                 key={index}
-                className='headerNavItemMenuContentItem'
+                className={styles.headerNavItemMenuContentItem}
                 initial={false}
                 animate={{
                   opacity: isOpen ? 1 : 0,
@@ -150,10 +150,10 @@ const HeaderNavItem = (props: HeaderNavItemProps) => {
   return (
     <Link
       to={props.to}
-      className={`headerNavItem headerNavItem--default${isRouteActive ? ' headerNavItem--active' : ''}`}
+      className={`${styles.headerNavItem} ${styles['headerNavItem--default']}${isRouteActive ? ` ${styles['headerNavItem--active']}` : ''}`}
     >
-      <div className='headerNavItemTitleWrapper'>
-        <h3 className='headerNavItemTitle'>{props.title}</h3>
+      <div className={styles.headerNavItemTitleWrapper}>
+        <h3 className={styles.headerNavItemTitle}>{props.title}</h3>
       </div>
     </Link>
   )

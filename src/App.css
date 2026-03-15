@@ -1,8 +1,15 @@
-.route-fallback {
-  min-height: 50vh;
-  display: grid;
-  place-items: center;
-  font-size: 14px;
-  letter-spacing: 0.04em;
-  opacity: 0.8;
+.route-transition-root {
+  width: 100%;
+  overflow-x: clip;
+}
+
+.route-transition-page {
+  width: 100%;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-transition-page {
+    will-change: auto;
+  }
 }

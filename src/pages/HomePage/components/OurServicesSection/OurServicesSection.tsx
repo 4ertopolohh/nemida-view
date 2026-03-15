@@ -1,103 +1,145 @@
-import { useEffect, useRef, useState } from 'react'
-import SectionTitle from '../../../../components/SectionTitle/SectionTitle';
-import '../OurServicesSection/OurServicesSection.scss'
+﻿import { useEffect, useRef, useState } from 'react'
+import SectionTitle from '../../../../components/SectionTitle/SectionTitle'
+import ServiceCard, { type ServiceCardProps } from '../../../../components/ServiceCard/ServiceCard'
+import styles from '../OurServicesSection/OurServicesSection.module.scss'
 
-import keyIcon from '../../../../assets/images/icons/keyIcon.svg'
-import hourIcon from '../../../../assets/images/icons/24hourIcon.svg'
-import downloadIcon from '../../../../assets/images/icons/downloadIcon.svg'
-import ServiceBanner from '../ServiceBanner/ServiceBanner';
+import glassSpiral3 from '../../../../assets/images/pictures/glassSpiral3.png'
+import glassSpiral4 from '../../../../assets/images/pictures/glassSpiral4.png'
+import glassSpiral5 from '../../../../assets/images/pictures/glassSpiral5.png'
+import glassSpiral6 from '../../../../assets/images/pictures/glassSpiral6.png'
+
+const SERVICE_CARDS: ServiceCardProps[] = [
+    {
+        title: 'Многостраничный сайт',
+        subtitle: 'Сайт из нескольких связанных между собой страниц, который презентует вашу компанию, студию, бренд и рассказывает об услугах.',
+        price: 'От 80 000 ₽',
+        backgroundColor: 'glass',
+        blobColor: '#a704cb',
+        image: glassSpiral3,
+        imageWidth: 380,
+        imageHeight: 176,
+        textType: 'black',
+        buttonWidth: '100%',
+        buttonColor: '#fff',
+        buttonHeight: 43,
+        cardWidth: 387,
+        cardHeight: 453,
+        arrowType: 'horizontal',
+    },
+    {
+        title: 'Лендинг',
+        subtitle: 'Одностраничный сайт, который создается для конкретной цели.',
+        price: 'От 40 000 ₽',
+        backgroundColor: '#F4FF76',
+        image: glassSpiral4,
+        imageWidth: 217,
+        imageHeight: 109,
+        textType: 'white',
+        buttonWidth: '100%',
+        buttonColor: '#000',
+        buttonHeight: 43,
+        cardWidth: 217,
+        cardHeight: 453,
+        arrowType: 'vertical',
+    },
+    {
+        title: 'Интернет магазин',
+        subtitle: 'Удобный инструмент с каталогом, корзиной и оплатой на сайте.',
+        price: 'От 90 000 ₽',
+        backgroundColor: '#ECECEC',
+        image: glassSpiral5,
+        imageWidth: 217,
+        imageHeight: 109,
+        textType: 'white',
+        buttonWidth: '100%',
+        buttonColor: '#000',
+        buttonHeight: 43,
+        cardWidth: 217,
+        cardHeight: 453,
+        arrowType: 'vertical',
+    },
+    {
+        title: 'Корпора-тивный сайт ',
+        subtitle: 'Сайт компании, рассказывающий о ней, ее услугах и деятельности.',
+        price: 'От 99 000 ₽',
+        backgroundColor: '#F4FF76',
+        image: glassSpiral6,
+        imageWidth: 217,
+        imageHeight: 109,
+        textType: 'white',
+        buttonWidth: '100%',
+        buttonColor: '#000',
+        buttonHeight: 43,
+        cardWidth: 217,
+        cardHeight: 453,
+        arrowType: 'vertical',
+    },
+]
 
 const OurServicesSection = () => {
-    const contentRef = useRef<HTMLDivElement | null>(null)
-    const [isContentVisible, setIsContentVisible] = useState(() => typeof IntersectionObserver === 'undefined')
+    const cardRefs = useRef<Array<HTMLDivElement | null>>([])
+    const [visibleCards, setVisibleCards] = useState<boolean[]>(() => {
+        const visibleByDefault = typeof IntersectionObserver === 'undefined'
+        return Array.from({ length: SERVICE_CARDS.length }, () => visibleByDefault)
+    })
 
     useEffect(() => {
-        const element = contentRef.current
-        if (!element) return
-
         if (typeof IntersectionObserver === 'undefined') return
 
         const observer = new IntersectionObserver(
             (entries) => {
-                const [entry] = entries
-                if (!entry) return
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting || entry.intersectionRatio < 0.3) return
 
-                if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
-                    setIsContentVisible(true)
+                    const target = entry.target as HTMLDivElement
+                    const cardIndex = Number(target.dataset.cardIndex)
+                    if (Number.isNaN(cardIndex)) return
+
+                    setVisibleCards((prev) => {
+                        if (prev[cardIndex]) return prev
+
+                        const next = [...prev]
+                        next[cardIndex] = true
+                        return next
+                    })
+
                     observer.unobserve(entry.target)
-                }
+                })
             },
             { threshold: [0.5] },
         )
 
-        observer.observe(element)
+        cardRefs.current.forEach((cardElement) => {
+            if (cardElement) observer.observe(cardElement)
+        })
 
         return () => {
             observer.disconnect()
         }
     }, [])
 
-    return (
-        <section className='ourServicesSection'>
-            <div className='container'>
-                <SectionTitle title='Наши услуги' />
-                <div
-                    ref={contentRef}
-                    className={`ourServicesContent${isContentVisible ? ' ourServicesContent--visible' : ''}`}
-                >
-                    <ServiceBanner 
-                        title1='Сайт под ключ'
-                        title2='Дизайн'
-                        title3='Фронтенд'
-                        title4='Бекенд'
-                        subtitle1='Готовый сайт с нуля по вашим требованиям'
-                        subtitle2='Создание дизайна вашего сайта'
-                        subtitle3='Разработка видимого интерфейса'
-                        subtitle4='Сервера, админ панель и т.д.'
-                        price1='От 50 000 ₽'
-                        price2='От 15 000 ₽'
-                        price3='От 20 000 ₽'
-                        price4='От 15 000 ₽'
-                        icon={keyIcon}
-                        blobColor='#b300ff'
-                    />
-                    <ServiceBanner 
-                        title1='Сопровождение'
-                        title2='Хостинг'
-                        title3='Правки'
-                        title4='Поддержка'
-                        subtitle1='Хостинг, наполнение, правки, поддержка после релиза'
-                        subtitle2='Размещение сайта на нашем сервере'
-                        subtitle3='Добавление или изменение функционала'
-                        subtitle4='Обслуживание после релиза'
-                        price1='От 1 500 ₽'
-                        price2='От 1 500 ₽'
-                        price3='От 2 000 ₽'
-                        price4='1 мес. бесплатно'
-                        icon={hourIcon}
-                        blobColor='#ff0000'
-                    />
-                    <ServiceBanner 
-                        title1='Установка CRM'
-                        title2='Настройка CRM'
-                        title3='Интеграции'
-                        title4='Автоматизация и обучение'
-                        subtitle1='Установка открытой Django CRM, автоматизация продаж, контроль заявок'
-                        subtitle2='Воронка продаж и карточки клиентов'
-                        subtitle3='Интеграция сайта и каналов связи'
-                        subtitle4='Автоматические задачи, обучение сотрудников'
-                        price1='От 10 000 ₽'
-                        price2='От 8 000 ₽'
-                        price3='От 7 000 ₽'
-                        price4='От 6 000 ₽'
-                        icon={downloadIcon}
-                        blobColor='#00ff99ff'
-                    />
+    return(
+        <section className={styles.ourServicesSection}>
+            <div className={`container ${styles.container}`}>
+                <SectionTitle text='наши услуги'/>
+                <div className={styles.ourServicesContent}>
+                    {SERVICE_CARDS.map((serviceCard, index) => (
+                        <div
+                            key={`${serviceCard.title}-${index}`}
+                            ref={(element) => {
+                                cardRefs.current[index] = element
+                            }}
+                            data-card-index={index}
+                            className={`${styles.serviceCardReveal}${visibleCards[index] ? ` ${styles.serviceCardRevealVisible}` : ''}`}
+                            style={{ transitionDelay: `${index * 120}ms` }}
+                        >
+                            <ServiceCard {...serviceCard} />
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>
     )
 }
 
-export default OurServicesSection;
-
+export default OurServicesSection

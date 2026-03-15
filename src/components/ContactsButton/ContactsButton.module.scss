@@ -1,0 +1,23 @@
+@use '../../styles/variables' as *;
+
+.contactsButton{
+    border-radius: 15px;
+    @include flex-center-row;
+    width: 163px;
+    height: 42px;
+    background-color: $color-base-yellow;
+    color: $color-black;
+    font-size: 16px;
+    font-weight: 700;
+    transition: $transition-style;
+    font-family: $font-default-title;
+
+    &:hover{
+        transform: scale(0.99);
+        background-color: $color-white;
+    }
+
+    span{
+        height: 14px;
+    }
+}

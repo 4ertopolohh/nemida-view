@@ -1,0 +1,81 @@
+@use '../../../../styles/variables' as *;
+
+.adSection{
+    height: 750px;
+    @include flex-center-column;
+    position: relative;
+
+    .spirals{
+        position: absolute; 
+        width: 100%;
+        min-width: 100vw;
+        @include flex-between-row;
+        z-index: 0;
+        opacity: 0;
+        transition: $transition-opacity-soft;
+        will-change: opacity;
+    }
+
+    .spiralsVisible{
+        opacity: 1;
+    }
+
+    .adSectionWrapper{
+        width: 100%;
+        height: 310px;
+        @include flex-center-column;
+        border: 1px solid;
+        @include apply-glass-surface($glass-dark-matte-strong);
+        position: relative;
+        z-index: 1;
+        opacity: 0;
+        transform: translateY(24px);
+        transition: $transition-reveal-slide;
+        will-change: opacity, transform;
+
+        .container{
+            @include flex-center-row;
+
+            .adSectionTitle{
+                width: 50%;
+
+                h1{
+                    max-width: 547px;
+                    font-size: 64px;
+                    height: 192px;
+                }
+            }
+
+            .adSectionDescription{
+                width: 50%;
+                @include flex-center-column;
+                gap: 25px;
+
+                .adSectionSubtitle{
+                    font-size: 24px;
+                    font-weight: 400;
+                }
+            }
+        }
+    }
+
+    .adSectionWrapperVisible{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .adSection{
+        .spirals{
+            opacity: 1;
+            transition: $transition-none;
+        }
+
+        .adSectionWrapper{
+            opacity: 1;
+            transform: none;
+            transition: $transition-none;
+        }
+    }
+}

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import '../ChangeLanguageButton/ChangeLanguageButton.scss'
+import styles from '../ChangeLanguageButton/ChangeLanguageButton.module.scss'
 
 const ChangeLanguageButton = () => {
     const [activeLanguage, setActiveLanguage] = useState<'en' | 'ru'>('en')
@@ -11,12 +11,12 @@ const ChangeLanguageButton = () => {
     return (
         <button
             type='button'
-            className='changeLanguageButton'
+            className={styles.changeLanguageButton}
             onClick={handleLanguageToggle}
         >
-            <span className={activeLanguage === 'en' ? 'changeLanguageActive' : 'changeLanguageInactive'}>EN</span>
+            <span className={activeLanguage === 'en' ? styles.changeLanguageActive : styles.changeLanguageInactive}>EN</span>
             <span id='changeLanguageSeparator'>|</span>
-            <span className={activeLanguage === 'ru' ? 'changeLanguageActive' : 'changeLanguageInactive'}>RU</span>
+            <span className={activeLanguage === 'ru' ? styles.changeLanguageActive : styles.changeLanguageInactive}>RU</span>
         </button>
     )
 }

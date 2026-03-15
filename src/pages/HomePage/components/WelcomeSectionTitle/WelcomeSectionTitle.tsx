@@ -1,8 +1,8 @@
-import '../WelcomeSectionTitle/WelcomeSectionTitle.scss'
+import styles from '../WelcomeSectionTitle/WelcomeSectionTitle.module.scss'
 
 const WelcomeSectionTitle = () => {
     return (
-        <h1 className='welcomeSectionTitle'>NEMIDA STUDIO</h1>
+        <h1 className={styles.welcomeSectionTitle}>NEMIDA STUDIO</h1>
     )
 }
 

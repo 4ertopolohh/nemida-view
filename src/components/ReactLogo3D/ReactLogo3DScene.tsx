@@ -1,4 +1,4 @@
-﻿import { memo, useEffect, useMemo, useRef } from 'react'
+import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Center, Environment, Lightformer } from '@react-three/drei'
 import { EffectComposer, Bloom, SSAO, Vignette, Noise, ToneMapping } from '@react-three/postprocessing'
@@ -12,11 +12,35 @@ import {
   type Mesh,
   type WebGLRenderer,
 } from 'three'
+import {
+  createAdaptiveCounters,
+  evaluateAdaptiveQuality,
+  resolveAutoQualityPolicy,
+  type QualityMode,
+  type QualityTier,
+} from './adaptiveQuality'
+
+type QualityPreset = {
+  fps: number
+  interactive: boolean
+  dpr: [number, number]
+  envResolution: number
+  shadowMapSize: number
+  multisampling: number
+  ssaoSamples: number
+  noiseOpacity: number
+  coreSegments: number
+  ringRadialSegments: number
+  ringTubularSegments: readonly [number, number]
+}
 
 type ReactAtomProps = {
   scale?: number
   interactive?: boolean
   active?: boolean
+  coreSegments: number
+  ringRadialSegments: number
+  ringTubularSegments: readonly [number, number]
 }
 
 type RingParams = {
@@ -33,6 +57,7 @@ type ReactLogo3DSceneProps = {
   isOptimised: boolean
   active: boolean
   interactive: boolean
+  qualityMode?: QualityMode
 }
 
 const CHROME_PROPS = {
@@ -88,7 +113,175 @@ const TAU = Math.PI * 2
 const POINTER_EVENT_OPTIONS: AddEventListenerOptions = { passive: true }
 const wrapAngle = (angle: number) => ((angle % TAU) + TAU) % TAU
 
-function ReactAtom({ scale = 1, interactive = true, active = true }: ReactAtomProps) {
+const QUALITY_PRESETS: Record<QualityTier, QualityPreset> = {
+  strong: {
+    fps: 30,
+    interactive: false,
+    dpr: [0.9, 1.0],
+    envResolution: 256,
+    shadowMapSize: 256,
+    multisampling: 0,
+    ssaoSamples: 4,
+    noiseOpacity: 0.06,
+    coreSegments: 32,
+    ringRadialSegments: 22,
+    ringTubularSegments: [128, 112],
+  },
+  low: {
+    fps: 30,
+    interactive: true,
+    dpr: [1.0, 1.2],
+    envResolution: 384,
+    shadowMapSize: 384,
+    multisampling: 1,
+    ssaoSamples: 6,
+    noiseOpacity: 0.07,
+    coreSegments: 40,
+    ringRadialSegments: 24,
+    ringTubularSegments: [160, 144],
+  },
+  medium: {
+    fps: 50,
+    interactive: true,
+    dpr: [1.1, 1.4],
+    envResolution: 512,
+    shadowMapSize: 512,
+    multisampling: 3,
+    ssaoSamples: 8,
+    noiseOpacity: 0.09,
+    coreSegments: 48,
+    ringRadialSegments: 28,
+    ringTubularSegments: [224, 192],
+  },
+  high: {
+    fps: 60,
+    interactive: true,
+    dpr: [1.35, 1.85],
+    envResolution: 1024,
+    shadowMapSize: 1024,
+    multisampling: 4,
+    ssaoSamples: 10,
+    noiseOpacity: 0.09,
+    coreSegments: 64,
+    ringRadialSegments: 28,
+    ringTubularSegments: [320, 256],
+  },
+}
+
+const ADAPTIVE_WINDOW_MS = 2400
+const ADAPTIVE_MIN_SAMPLES = 36
+
+type FrameLimiterProps = {
+  active: boolean
+  fps: number
+}
+
+function FrameLimiter({ active, fps }: FrameLimiterProps) {
+  const invalidate = useThree((state) => state.invalidate)
+
+  useEffect(() => {
+    if (!active) return
+
+    const frameDurationMs = Math.max(1, Math.floor(1000 / fps))
+    invalidate()
+
+    const timerId = window.setInterval(() => {
+      invalidate()
+    }, frameDurationMs)
+
+    return () => {
+      window.clearInterval(timerId)
+    }
+  }, [active, fps, invalidate])
+
+  return null
+}
+
+type AdaptiveQualityControllerProps = {
+  active: boolean
+  enabled: boolean
+  qualityTier: QualityTier
+  maxTier: QualityTier
+  onTierChange: (nextTier: QualityTier) => void
+}
+
+function AdaptiveQualityController({
+  active,
+  enabled,
+  qualityTier,
+  maxTier,
+  onTierChange,
+}: AdaptiveQualityControllerProps) {
+  const frameCountRef = useRef(0)
+  const frameTimeTotalMsRef = useRef(0)
+  const windowStartMsRef = useRef(0)
+  const countersRef = useRef(createAdaptiveCounters())
+  const lastTierChangeMsRef = useRef(0)
+
+  useEffect(() => {
+    const now = performance.now()
+    frameCountRef.current = 0
+    frameTimeTotalMsRef.current = 0
+    windowStartMsRef.current = now
+
+    if (!active || !enabled) {
+      countersRef.current = createAdaptiveCounters()
+    }
+  }, [active, enabled, qualityTier])
+
+  useFrame((_, delta) => {
+    if (!active || !enabled) return
+
+    const now = performance.now()
+
+    if (windowStartMsRef.current === 0) {
+      windowStartMsRef.current = now
+    }
+
+    frameCountRef.current += 1
+    frameTimeTotalMsRef.current += delta * 1000
+
+    const windowElapsedMs = now - windowStartMsRef.current
+    if (windowElapsedMs < ADAPTIVE_WINDOW_MS || frameCountRef.current < ADAPTIVE_MIN_SAMPLES) {
+      return
+    }
+
+    const averageFrameMs = frameTimeTotalMsRef.current / frameCountRef.current
+    const frameBudgetMs = 1000 / QUALITY_PRESETS[qualityTier].fps
+    const timeSinceTierChangeMs = now - lastTierChangeMsRef.current
+
+    const nextQualityDecision = evaluateAdaptiveQuality({
+      averageFrameMs,
+      frameBudgetMs,
+      counters: countersRef.current,
+      timeSinceTierChangeMs,
+      qualityTier,
+      maxTier,
+    })
+
+    countersRef.current = nextQualityDecision.counters
+
+    if (nextQualityDecision.tierChanged) {
+      lastTierChangeMsRef.current = now
+      onTierChange(nextQualityDecision.nextTier)
+    }
+
+    frameCountRef.current = 0
+    frameTimeTotalMsRef.current = 0
+    windowStartMsRef.current = now
+  })
+
+  return null
+}
+
+function ReactAtom({
+  scale = 1,
+  interactive = true,
+  active = true,
+  coreSegments,
+  ringRadialSegments,
+  ringTubularSegments,
+}: ReactAtomProps) {
   const group = useRef<Group | null>(null)
   const core = useRef<Mesh | null>(null)
   const ringsPivot = useRef<Group | null>(null)
@@ -101,10 +294,14 @@ function ReactAtom({ scale = 1, interactive = true, active = true }: ReactAtomPr
   const targetRot = useRef({ x: 0, y: 0 })
   const currentRot = useRef({ x: 0, y: 0 })
 
-  const coreGeometry = useMemo(() => new SphereGeometry(0.22, 64, 64), [])
+  const coreGeometry = useMemo(() => new SphereGeometry(0.22, coreSegments, coreSegments), [coreSegments])
   const ringGeometries = useMemo(
-    () => RING_PARAMS.map((params) => new TorusGeometry(params.radius, params.tube, 28, 320)),
-    [],
+    () =>
+      RING_PARAMS.map((params, index) => {
+        const tubularSegments = index === 0 ? ringTubularSegments[0] : ringTubularSegments[1]
+        return new TorusGeometry(params.radius, params.tube, ringRadialSegments, tubularSegments)
+      }),
+    [ringRadialSegments, ringTubularSegments],
   )
   const coreMaterial = useMemo(() => new MeshPhysicalMaterial({ color: '#f3f3f3', ...CHROME_PROPS }), [])
   const ringMaterial = useMemo(() => new MeshPhysicalMaterial({ color: '#f7f7f7', ...CHROME_PROPS }), [])
@@ -262,20 +459,33 @@ function ReactAtom({ scale = 1, interactive = true, active = true }: ReactAtomPr
   )
 }
 
-const ReactLogo3DScene = memo(function ReactLogo3DScene({ isOptimised, active, interactive }: ReactLogo3DSceneProps) {
-  const dpr: [number, number] = isOptimised ? [1, 1.75] : [1.5, 2.5]
-  const envResolution = isOptimised ? 512 : 1024
-  const shadowMapSize = isOptimised ? 512 : 1024
-  const multisampling = active ? (isOptimised ? 2 : 4) : 0
-  const ssaoSamples = active ? (isOptimised ? 6 : 10) : 2
-  const frameloop: 'always' | 'demand' = active ? 'always' : 'demand'
+const ReactLogo3DScene = memo(function ReactLogo3DScene({
+  isOptimised,
+  active,
+  interactive,
+  qualityMode = 'auto',
+}: ReactLogo3DSceneProps) {
+  const autoQualityPolicy = useMemo(() => resolveAutoQualityPolicy(), [])
+  const resolvedMode: QualityMode = isOptimised ? qualityMode : 'high'
+  const adaptiveEnabled = resolvedMode === 'auto'
+  const fixedTier: QualityTier | null = resolvedMode === 'auto' ? null : resolvedMode
+  const maxAdaptiveTier = adaptiveEnabled ? autoQualityPolicy.maxTier : fixedTier ?? 'high'
+
+  const [qualityTier, setQualityTier] = useState<QualityTier>(() =>
+    adaptiveEnabled ? autoQualityPolicy.initialTier : fixedTier ?? 'medium',
+  )
+
+  const qualityPreset = QUALITY_PRESETS[qualityTier]
+  const activeMultisampling = active ? qualityPreset.multisampling : 0
+  const activeSsaoSamples = active ? qualityPreset.ssaoSamples : 2
+  const interactiveEnabled = interactive && qualityPreset.interactive
 
   return (
     <Canvas
       shadows
       camera={CAMERA}
-      dpr={dpr}
-      frameloop={frameloop}
+      dpr={qualityPreset.dpr}
+      frameloop="demand"
       gl={GL_CONFIG}
       onCreated={({ gl }) => {
         const typed = gl as WebGLRenderer & { physicallyCorrectLights?: boolean }
@@ -293,8 +503,8 @@ const ReactLogo3DScene = memo(function ReactLogo3DScene({ isOptimised, active, i
         position={[3.5, 4.2, 3.5]}
         intensity={2.4}
         castShadow
-        shadow-mapSize-width={shadowMapSize}
-        shadow-mapSize-height={shadowMapSize}
+        shadow-mapSize-width={qualityPreset.shadowMapSize}
+        shadow-mapSize-height={qualityPreset.shadowMapSize}
         shadow-camera-near={0.1}
         shadow-camera-far={15}
         shadow-camera-left={-3}
@@ -305,7 +515,7 @@ const ReactLogo3DScene = memo(function ReactLogo3DScene({ isOptimised, active, i
       <directionalLight position={[-4, 1.5, 2]} intensity={0.75} />
       <directionalLight position={[0, 2.5, -4]} intensity={0.85} />
 
-      <Environment resolution={envResolution} background={false} blur={0.12}>
+      <Environment resolution={qualityPreset.envResolution} background={false} blur={0.12}>
         <Lightformer intensity={10} position={[0, 0.6, 3.5]} rotation={[0, 0, 0]} scale={[12, 2.2, 1]} />
         <Lightformer intensity={7} position={[4.5, 0.2, 0]} rotation={[0, Math.PI / 2, 0]} scale={[10, 3.5, 1]} />
         <Lightformer intensity={6} position={[0, -0.6, -3.5]} rotation={[0, Math.PI, 0]} scale={[10, 2.8, 1]} />
@@ -313,15 +523,32 @@ const ReactLogo3DScene = memo(function ReactLogo3DScene({ isOptimised, active, i
       </Environment>
 
       <Center>
-        <ReactAtom scale={1.15} interactive={interactive} active={active} />
+        <ReactAtom
+          scale={1.15}
+          interactive={interactiveEnabled}
+          active={active}
+          coreSegments={qualityPreset.coreSegments}
+          ringRadialSegments={qualityPreset.ringRadialSegments}
+          ringTubularSegments={qualityPreset.ringTubularSegments}
+        />
       </Center>
 
-      <EffectComposer multisampling={multisampling}>
+      <FrameLimiter active={active} fps={qualityPreset.fps} />
+
+      <AdaptiveQualityController
+        active={active}
+        enabled={adaptiveEnabled}
+        qualityTier={qualityTier}
+        maxTier={maxAdaptiveTier}
+        onTierChange={setQualityTier}
+      />
+
+      <EffectComposer multisampling={activeMultisampling}>
         <ToneMapping />
-        <SSAO samples={ssaoSamples} radius={0.11} intensity={11} luminanceInfluence={0.65} />
+        <SSAO samples={activeSsaoSamples} radius={0.11} intensity={11} luminanceInfluence={0.65} />
         <Bloom intensity={0.55} luminanceThreshold={0.9} luminanceSmoothing={0.15} />
         <Vignette eskil={false} offset={0.25} darkness={0.75} />
-        <Noise premultiply blendFunction={BlendFunction.SOFT_LIGHT} opacity={0.12} />
+        <Noise premultiply blendFunction={BlendFunction.SOFT_LIGHT} opacity={qualityPreset.noiseOpacity} />
       </EffectComposer>
     </Canvas>
   )

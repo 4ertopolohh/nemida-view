@@ -1,0 +1,33 @@
+@use '../../styles/variables' as *;
+
+.suitsMeButton{
+    transition: $transition-style;
+    border-radius: 15px;
+    @include flex-between-row;
+    padding: 0 12px;
+
+    span{
+        height: 15px;
+    }
+
+    &:hover{
+        transform: scale(0.99) !important;
+    }
+
+    .suitsMeButtonText{
+        font-size: 14px;
+    }
+
+    .suitsMeButtonArrow{
+        width: 9px;
+        height: 10px;
+        flex-shrink: 0;
+        display: block;
+        mask: url('../../assets/images/icons/suitMeButtonArrow.svg') center / contain no-repeat;
+        -webkit-mask: url('../../assets/images/icons/suitMeButtonArrow.svg') center / contain no-repeat;
+    }
+}
+
+// .blackButton:hover .suitsMeButtonText{
+//     color: #000 !important;
+// }

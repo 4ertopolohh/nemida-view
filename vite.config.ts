@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -7,4 +8,10 @@ const repoName = 'nemida-view'
 export default defineConfig(({ mode }) => ({
   base: mode === 'production' ? `/${repoName}/` : '/',
   plugins: [react()],
+  test: {
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+    include: ['src/test/**/*.{test,spec}.{ts,tsx}'],
+    css: true,
+  },
 }))

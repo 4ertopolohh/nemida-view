@@ -1,5 +1,5 @@
 import InDevSection from '../../components/InDevSection/InDevSection';
-import '../ArticlePage/ArticlePage.scss'
+import '../ArticlePage/ArticlePage.module.scss'
 
 const ArticlePage = () => {
     return (

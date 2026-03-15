@@ -1,0 +1,7 @@
+@use '../../styles/variables' as *;
+
+.headerButtons {
+    @include flex-center-row;
+    gap: 10px;
+    padding-top: 10px;
+}

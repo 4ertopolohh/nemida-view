@@ -1,30 +1,20 @@
-import '../ContactsButton/ContactsButton.scss'
+import styles from '../ContactsButton/ContactsButton.module.scss'
 
-export type ContactsButtonProps = {
+type ContactsButtonProps = {
     width?: number | string
     height?: number | string
-    fontSize?: number | string
+    text?: string
 }
 
-const toCssSize = (value?: number | string) => {
-    if (typeof value === 'number') {
-        return `${value}px`
+const ContactsButton = ({ width, height, text = 'СВЯЗАТЬСЯ' }: ContactsButtonProps) => {
+    const buttonStyle = {
+        ...(width !== undefined ? { width } : {}),
+        ...(height !== undefined ? { height } : {}),
     }
-
-    return value
-}
-
-const ContactsButton = ({ width, height, fontSize }: ContactsButtonProps) => {
-    const style = {
-        width: toCssSize(width),
-        height: toCssSize(height),
-        fontSize: toCssSize(fontSize),
-    }
-    const buttonLabel = '\u0421\u0432\u044f\u0437\u0430\u0442\u044c\u0441\u044f'
 
     return (
-        <button className='contactsButton' style={style}>
-            {buttonLabel}
+        <button className={styles.contactsButton} style={buttonStyle}>
+            <span>{text}</span>
         </button>
     )
 }

@@ -1,4 +1,4 @@
-import '../HeaderNav/HeaderNav.scss'
+import styles from '../HeaderNav/HeaderNav.module.scss'
 import HeaderNavItem, { type HeaderNavItemProps } from '../HeaderNavItem/HeaderNavItem'
 
 export type HeaderNavListItem = HeaderNavItemProps
@@ -9,10 +9,10 @@ type HeaderNavProps = {
 
 const HeaderNav = ({ headerNavTitles }: HeaderNavProps) => {
     return (
-        <nav className='headerNav'>
-            <ul className='headerNavList'>
+        <nav className={styles.headerNav}>
+            <ul className={styles.headerNavList}>
                 {headerNavTitles.map((item) => (
-                    <li key={item.title} className='headerNavListItem'>
+                    <li key={item.title} className={styles.headerNavListItem}>
                         <HeaderNavItem {...item} />
                     </li>
                 ))}

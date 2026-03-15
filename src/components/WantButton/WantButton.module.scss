@@ -1,0 +1,20 @@
+@use '../../styles/variables' as *;
+
+.wantButton{
+    background-color: $color-base-yellow;
+    @include flex-center-column;
+    transition: $transition-style;
+    border-radius: 15px;
+
+    span{
+        font-size: 16px;
+        font-family: $font-default-title;
+        color: $color-black;
+        height: 16px;
+    }
+
+    &:hover{
+        transform: scale(0.99);
+        background-color: $color-white;
+    }
+}

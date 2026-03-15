@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from 'react'
 import { LazyMotion, domAnimation, m } from 'framer-motion'
-import '../Header/Header.scss'
+import styles from '../Header/Header.module.scss'
 import HeaderButtons from '../HeaderButtons/HeaderButtons'
 import HeaderLogo from '../HeaderLogo/HeaderLogo'
 import HeaderNav, { type HeaderNavListItem } from '../HeaderNav/HeaderNav'
@@ -45,7 +45,7 @@ const Header = ({ headerNavTitles }: HeaderProps) => {
   return (
     <LazyMotion features={domAnimation}>
       <m.header
-        className='header'
+        className={styles.header}
         initial={shouldAnimateOnMount ? { opacity: 0, y: -20 } : false}
         animate={{ opacity: 1, y: 0 }}
         transition={
@@ -54,8 +54,8 @@ const Header = ({ headerNavTitles }: HeaderProps) => {
             : { duration: 0 }
         }
       >
-        <div className={`headerUnderlay${isAtTop ? '' : ' headerUnderlayVisible'}`}></div>
-        <div className='container'>
+        <div className={`${styles.headerUnderlay}${isAtTop ? '' : ` ${styles.headerUnderlayVisible}`}`}></div>
+        <div className={`container ${styles.container}`}>
           <HeaderLogo />
           <HeaderNav headerNavTitles={headerNavTitles} />
           <HeaderButtons />

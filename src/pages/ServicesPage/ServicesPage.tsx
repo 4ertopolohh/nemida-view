@@ -1,5 +1,5 @@
 import InDevSection from '../../components/InDevSection/InDevSection';
-import '../ServicesPage/ServicesPage.scss'
+import '../ServicesPage/ServicesPage.module.scss'
 
 const ServicesPage = () => {
     return (

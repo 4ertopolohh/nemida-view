@@ -5,6 +5,7 @@ type ReactLogo3DProps = {
   height?: number | string
   renderOnView?: boolean
   optimisation?: 'on' | 'off'
+  qualityMode?: 'auto' | 'strong' | 'low' | 'medium' | 'high'
 }
 
 const ReactLogo3DScene = lazy(() => import('../ReactLogo3D/ReactLogo3DScene'))
@@ -30,8 +31,9 @@ function usePageVisible() {
 const ReactLogo3D = ({
   width = '50%',
   height = 550,
-  renderOnView = false,
-  optimisation = 'off',
+  renderOnView = true,
+  optimisation = 'on',
+  qualityMode = 'auto',
 }: ReactLogo3DProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [isInViewport, setIsInViewport] = useState(!renderOnView)
@@ -77,7 +79,7 @@ const ReactLogo3D = ({
     >
       <Suspense fallback={<div style={fallbackStyle} />}>
         {isInViewport ? (
-          <ReactLogo3DScene active={active} isOptimised={isOptimised} interactive={!isOptimised && active} />
+          <ReactLogo3DScene active={active} isOptimised={isOptimised} interactive={active} qualityMode={qualityMode} />
         ) : (
           <div style={fallbackStyle} />
         )}
